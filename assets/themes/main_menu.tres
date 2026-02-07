@@ -1,0 +1,23 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://c1704jqbhyd2s"]
+
+[ext_resource type="FontFile" uid="uid://fgqha1o8kjfq" path="res://assets/fonts/Doctor Glitch.otf" id="1_djdlk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_av2uu"]
+bg_color = Color(0, 0, 0, 0.39215687)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_va2tg"]
+bg_color = Color(0, 0, 0, 1)
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 70
+Button/fonts/font = ExtResource("1_djdlk")
+Button/styles/disabled = SubResource("StyleBoxFlat_av2uu")
+Button/styles/normal = SubResource("StyleBoxFlat_va2tg")
+Label/font_sizes/font_size = 175
+Label/fonts/font = ExtResource("1_djdlk")
+MarginContainer/constants/margin_bottom = 90
+MarginContainer/constants/margin_left = 45
+MarginContainer/constants/margin_right = 45
+MarginContainer/constants/margin_top = 400
+VBoxContainer/constants/separation = 90

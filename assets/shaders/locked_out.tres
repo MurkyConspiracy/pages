@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://crvkuplrbwn4j"]
+
+[ext_resource type="Shader" uid="uid://gvgbin06aa7t" path="res://assets/shaders/locked_out.gdshader" id="1_dqj3f"]
+
+[resource]
+shader = ExtResource("1_dqj3f")
+shader_parameter/line_count = 20.0
+shader_parameter/line_brightness = 0.5
+shader_parameter/roll_speed = 0.08
+shader_parameter/line_thickness = 0.3
+shader_parameter/background_darkness = 0.0070000003325

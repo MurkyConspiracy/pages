@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2dk7whx4cjl2"]
+
+[ext_resource type="Theme" uid="uid://c1704jqbhyd2s" path="res://assets/themes/main_menu.tres" id="1_y7f13"]
+[ext_resource type="Script" uid="uid://3uesbhjuvcm6" path="res://scripts/pages_main.gd" id="2_3jqky"]
+[ext_resource type="Material" uid="uid://cunv4xrt0qmlh" path="res://assets/shaders/title_shader_material.tres" id="3_3jqky"]
+[ext_resource type="Script" uid="uid://c1867rm23aq7r" path="res://scripts/title.gd" id="4_mu3hj"]
+
+[node name="PagesMain" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_y7f13")
+script = ExtResource("2_3jqky")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+material = ExtResource("3_3jqky")
+layout_mode = 2
+text = "Pages"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_mu3hj")
+blink_chance = 0.5
+
+[node name="Delve_Button" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "  Delve Deeper  "
+icon_alignment = 1

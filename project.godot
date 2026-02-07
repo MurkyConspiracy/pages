@@ -11,9 +11,32 @@ config_version=5
 [application]
 
 config/name="Pages"
+run/main_scene="uid://b2dk7whx4cjl2"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Pages_SQL="*res://scripts/util/sql_api_connection.gd"
+GlobalLogger="*res://scripts/util/logger.gd"
+
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+window/size/window_width_override.debug=360
+window/size/window_height_override.debug=640
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.44241327, 0.239319, 0.16905662, 1)

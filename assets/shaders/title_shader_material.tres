@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cunv4xrt0qmlh"]
+
+[ext_resource type="Shader" uid="uid://dn46wvk2dewcd" path="res://assets/shaders/title_shader_material.gdshader" id="1_7iyif"]
+
+[resource]
+shader = ExtResource("1_7iyif")
+shader_parameter/glitch_amount = 0.1610000076475
+shader_parameter/shear_intensity = 0.5
+shader_parameter/rgb_split = 0.05000000074506
+shader_parameter/pixel_frequency = 0.038000001805
+shader_parameter/pixel_brightness = 0.8
+shader_parameter/pixel_size = 1.0
+shader_parameter/pixel_variation = 0.2490000118275
+shader_parameter/shear_speed = 3.1050001474875
+shader_parameter/shear_burst_frequency = 0.61600002600012
+shader_parameter/pixel_speed = 0.918000043605
+shader_parameter/pixel_burst_frequency = 0.60700002557262
