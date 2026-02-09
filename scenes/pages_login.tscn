@@ -1,0 +1,93 @@
+[gd_scene load_steps=6 format=3 uid="uid://chp8seh84qmty"]
+
+[ext_resource type="Theme" uid="uid://5i8dq35a04rk" path="res://assets/themes/signup_menu.tres" id="1_0dlu3"]
+[ext_resource type="Script" uid="uid://dnhj063h2rxgv" path="res://scripts/pages_login.gd" id="2_ovcde"]
+[ext_resource type="Material" uid="uid://cunv4xrt0qmlh" path="res://assets/shaders/title_shader_material.tres" id="2_wulyw"]
+[ext_resource type="Script" uid="uid://c1867rm23aq7r" path="res://scripts/util/text_flip_pop.gd" id="3_ovcde"]
+
+[sub_resource type="SystemFont" id="SystemFont_wulyw"]
+
+[node name="PagesLogin" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_0dlu3")
+script = ExtResource("2_ovcde")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="E-Mail" type="Label" parent="CenterContainer/VBoxContainer"]
+material = ExtResource("2_wulyw")
+layout_mode = 2
+text = "E-Mail"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_ovcde")
+
+[node name="email_input" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(615, 65)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 25
+placeholder_text = "Email"
+alignment = 1
+max_length = 32
+
+[node name="Password" type="Label" parent="CenterContainer/VBoxContainer"]
+material = ExtResource("2_wulyw")
+layout_mode = 2
+text = "Password"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_ovcde")
+
+[node name="password_input" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(615, 65)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 25
+placeholder_text = "Email"
+alignment = 1
+max_length = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 29
+
+[node name="login_button" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Login "
+
+[node name="signup_button" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = " signup "
+
+[node name="Status_Label" type="Label" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_wulyw")
+theme_override_font_sizes/font_size = 50
+text = "Creating Account..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/login_button" to="." method="_on_login_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/signup_button" to="." method="_on_signup_button_pressed"]

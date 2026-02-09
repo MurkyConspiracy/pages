@@ -1,0 +1,26 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://5i8dq35a04rk"]
+
+[ext_resource type="FontFile" uid="uid://fgqha1o8kjfq" path="res://assets/fonts/Doctor Glitch.otf" id="1_6vtbi"]
+[ext_resource type="FontFile" uid="uid://bw6rs0iuqvu7p" path="res://assets/fonts/bloodcrowe.ttf" id="2_gvbdw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_av2uu"]
+bg_color = Color(0, 0, 0, 0.39215687)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_va2tg"]
+bg_color = Color(0, 0, 0, 1)
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 70
+Button/fonts/font = ExtResource("1_6vtbi")
+Button/styles/disabled = SubResource("StyleBoxFlat_av2uu")
+Button/styles/normal = SubResource("StyleBoxFlat_va2tg")
+Label/font_sizes/font_size = 95
+Label/fonts/font = ExtResource("1_6vtbi")
+LineEdit/font_sizes/font_size = 45
+LineEdit/fonts/font = ExtResource("2_gvbdw")
+MarginContainer/constants/margin_bottom = 90
+MarginContainer/constants/margin_left = 45
+MarginContainer/constants/margin_right = 45
+MarginContainer/constants/margin_top = 400
+VBoxContainer/constants/separation = 70
