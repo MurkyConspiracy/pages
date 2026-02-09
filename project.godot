@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Pages_SQL="*res://scripts/util/sql_api_connection.gd"
 GlobalLogger="*res://scripts/util/logger.gd"
+Themes="*res://scripts/util/themes.gd"
 
 [display]
 

@@ -1,6 +1,7 @@
 extends Control
 
 @onready var delve_button: Button = %Delve_Button
+@onready var login_button: Button = %Login_Button
 
 func _ready() -> void:
 	#Pages_SQL.request_completed.connect(_on_data_received)
@@ -16,3 +17,9 @@ func _on_data_received(data, error):
 		GlobalLogger.error("Error occurred: " + str(error))
 	else:
 		GlobalLogger.info("Received data: " + str(data))
+		
+
+
+func _on_login_button_pressed() -> void:
+	if not Pages_SQL.is_authenticated():
+		get_tree().change_scene_to_file("res://scenes/pages_login.tscn")
