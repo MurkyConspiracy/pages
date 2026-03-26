@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bw6rs0iuqvu7p" path="res://assets/fonts/bloodcrowe.ttf" id="2_gvbdw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_av2uu"]
-bg_color = Color(0, 0, 0, 0.39215687)
+bg_color = Color(0, 0, 0, 0.392157)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_va2tg"]
 bg_color = Color(0, 0, 0, 1)

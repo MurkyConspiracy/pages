@@ -44,7 +44,7 @@ func sign_in(email: String, password: String):
 	var url = api_endpoint + "/auth/v1/token?grant_type=password"
 	var headers = [
 		"apikey: " + published_key,
-        "Content-Type: application/json"
+		"Content-Type: application/json"
 	]
 	var body = JSON.stringify({
 		"email": email,
@@ -86,7 +86,7 @@ func create_player(player_name: String, theme: Themes):
 		"apikey: " + api_endpoint,
 		"Authorization: Bearer " + access_token,
 		"Content-Type: application/json",
-        "Prefer: return=representation"
+		"Prefer: return=representation"
 	]
 	var body = JSON.stringify({"name": player_name, "theme_id": theme})
 	http_request.set_meta("request_type", "create_player")
@@ -101,9 +101,11 @@ func _on_request_completed(_result, response_code, _headers, body):
 	match request_type:
 		"signup":
 			if response_code == 200:
-				current_user = json.emailv
-				GlobalLogger.debug("User Creation Successful: " + str(current_user.email))
-				GlobalLogger.debug("User Requires Email Confirmation: " + str(current_user.email))
+				current_user = json.email
+				GlobalLogger.debug("User Creation Successful: " + str(current_user))
+				GlobalLogger.debug("User Requires Email Confirmation: " + str(current_user))
+			elif response_code == 429:
+				GlobalLogger.error("API Error: " + str(json))
 			else:
 				GlobalLogger.warn("Auth error: " +str(json))
 				auth_state_changed.emit(null)
@@ -113,7 +115,7 @@ func _on_request_completed(_result, response_code, _headers, body):
 				access_token = json.access_token
 				_save_session(json)
 				auth_state_changed.emit(current_user)
-				GlobalLogger.debug("Authentication Successful: " + str(current_user.email))
+				GlobalLogger.debug("Authentication Successful: " + str(current_user))
 			else:
 				GlobalLogger.warn("Auth error: " +str(json))
 				auth_state_changed.emit(null)
@@ -146,7 +148,7 @@ func _load_session():
 				current_user = auth_data.user
 				access_token = auth_data.access_token
 				auth_state_changed.emit(current_user)
-				GlobalLogger.debug("Session restored: " + str(current_user.email))
+				GlobalLogger.debug("Session restored: " + str(current_user))
 				
 # Clear saved session
 func _clear_session():
