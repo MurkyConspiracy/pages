@@ -74,6 +74,7 @@ func get_all_players():
 		"apikey: " + published_key,
 		"Authorization: Bearer " + published_key
 	]
+	http_request.set_meta("request_type", "get_players")
 	http_request.request(url, headers)
 	
 func create_player(player_name: String, theme: Themes):
@@ -127,6 +128,9 @@ func _on_request_completed(_result, response_code, _headers, body):
 			else:
 				request_completed.emit(null, json)
 				GlobalLogger.error("Error " + str(response_code) + ": " + str(json))
+		_:
+			GlobalLogger.error("Unhandled API Request!")
+			request_completed.emit(null)
 		
 #endregion Internal Methods
 

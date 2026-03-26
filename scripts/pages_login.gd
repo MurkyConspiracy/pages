@@ -47,7 +47,7 @@ func _on_signup_button_pressed() -> void:
 		return
 	
 	status_label.add_theme_color_override("font_color",Color.YELLOW)
-	status_label.text = "Creating account..."
+	status_label.text = "Creating account. Please verify your email!"
 	Pages_SQL.sign_up(email, password)
 	
 func _on_auth_changed(user):

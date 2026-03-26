@@ -6,6 +6,8 @@ extends Control
 
 func _ready() -> void:
 	Pages_SQL.request_completed.connect(_on_data_received)
+	if Pages_SQL.current_user != null:
+		user_label.text = Pages_SQL.current_user.email
 	#GlobalLogger.debug("SQL init disabled")
 	
 	#Get loaded context and show username
@@ -23,7 +25,6 @@ func _on_data_received(data, error):
 	
 	
 	GlobalLogger.info("Received data: " + str(data))
-	user_label.text = data
 		
 		
 
