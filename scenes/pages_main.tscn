@@ -16,16 +16,6 @@ grow_vertical = 2
 theme = ExtResource("1_np7sg")
 script = ExtResource("2_3jqky")
 
-[node name="UserLabel" type="Label" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -1.0
-offset_bottom = 100.0
-grow_horizontal = 0
-
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -57,6 +47,7 @@ text = "  Delve Deeper  "
 icon_alignment = 1
 
 [node name="Inspire_Button" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 material = ExtResource("5_np7sg")
 custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
@@ -76,8 +67,38 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 text = " Login "
 
+[node name="UserLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(650, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Logout_Button" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+text = " LOGOUT "
+
+[node name="Exit_Button" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+text = " Exit "
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Delve_Button" to="." method="_on_delve_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Login_Button" to="." method="_on_login_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Logout_Button" to="." method="_on_logout_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Exit_Button" to="." method="_on_exit_button_pressed"]

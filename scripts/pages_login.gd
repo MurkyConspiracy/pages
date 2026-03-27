@@ -63,3 +63,7 @@ func _on_auth_changed(user):
 		
 func _go_to_main_menu():
 	get_tree().change_scene_to_file("res://scenes/pages_main.tscn")
+
+
+func _on_password_input_text_submitted(new_text: String) -> void:
+	_on_login_button_pressed()

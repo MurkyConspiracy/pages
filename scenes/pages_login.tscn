@@ -1,9 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://chp8seh84qmty"]
+[gd_scene load_steps=8 format=3 uid="uid://chp8seh84qmty"]
 
 [ext_resource type="Theme" uid="uid://5i8dq35a04rk" path="res://assets/themes/signup_menu.tres" id="1_0dlu3"]
 [ext_resource type="Script" uid="uid://dnhj063h2rxgv" path="res://scripts/pages_login.gd" id="2_ovcde"]
 [ext_resource type="Material" uid="uid://cunv4xrt0qmlh" path="res://assets/shaders/title_shader_material.tres" id="2_wulyw"]
 [ext_resource type="Script" uid="uid://c1867rm23aq7r" path="res://scripts/util/text_flip_pop.gd" id="3_ovcde"]
+
+[sub_resource type="SystemFont" id="SystemFont_ovcde"]
+
+[sub_resource type="SystemFont" id="SystemFont_jp82j"]
 
 [sub_resource type="SystemFont" id="SystemFont_wulyw"]
 
@@ -42,10 +46,12 @@ custom_minimum_size = Vector2(615, 65)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
+theme_override_fonts/font = SubResource("SystemFont_ovcde")
 theme_override_font_sizes/font_size = 25
 placeholder_text = "Email"
 alignment = 1
 max_length = 32
+virtual_keyboard_type = 5
 
 [node name="Password" type="Label" parent="CenterContainer/VBoxContainer"]
 material = ExtResource("2_wulyw")
@@ -61,10 +67,13 @@ custom_minimum_size = Vector2(615, 65)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+theme_override_fonts/font = SubResource("SystemFont_jp82j")
 theme_override_font_sizes/font_size = 25
-placeholder_text = "Email"
+placeholder_text = "Password"
 alignment = 1
 max_length = 32
+virtual_keyboard_type = 6
+secret = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -89,5 +98,6 @@ text = " "
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="text_submitted" from="CenterContainer/VBoxContainer/password_input" to="." method="_on_password_input_text_submitted"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/login_button" to="." method="_on_login_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/signup_button" to="." method="_on_signup_button_pressed"]

@@ -19,7 +19,7 @@ func _ready():
 	http_request.request_completed.connect(_on_request_completed)
 	
 	#Check for and load saved session
-	#_load_session()
+	_load_session()
 	
 	
 #region Authentication
@@ -71,9 +71,12 @@ func is_authenticated() -> bool:
 func get_all_players():
 	var url = api_endpoint + "/rest/v1/Players?select=*"
 	var headers = [
-		"apikey: " + published_key,
-		"Authorization: Bearer " + published_key
+		"apikey: " + published_key
 	]
+	if is_authenticated():
+		headers.append("Authorization: Bearer " + str(access_token))
+	else:
+		headers.append("Authorization: Bearer " + str(published_key))
 	http_request.set_meta("request_type", "get_players")
 	http_request.request(url, headers)
 	
@@ -152,7 +155,7 @@ func _load_session():
 				current_user = auth_data.user
 				access_token = auth_data.access_token
 				auth_state_changed.emit(current_user)
-				GlobalLogger.debug("Session restored: " + str(current_user))
+				GlobalLogger.debug("Session restored: " + str(current_user.email) + " JWT Token : " + str(access_token.left(4) + "..." + str(access_token.right(4))))
 				
 # Clear saved session
 func _clear_session():
