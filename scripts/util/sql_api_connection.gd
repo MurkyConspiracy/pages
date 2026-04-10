@@ -131,13 +131,15 @@ func _on_request_completed(_result, response_code, _headers, body):
 			else:
 				request_completed.emit(null, json)
 				GlobalLogger.error("Error " + str(response_code) + ": " + str(json))
+		"list_fear_bucket":
+			GlobalLogger.info("File data: " + str(json))
 		_:
 			GlobalLogger.error("Unhandled API Request!")
 			request_completed.emit(null)
 		
 #endregion Internal Methods
 
-#region File session
+#region Local File session
 func _save_session(auth_data):
 	var file = FileAccess.open("user://session.dat", FileAccess.WRITE)
 	if file:
@@ -161,4 +163,33 @@ func _load_session():
 func _clear_session():
 	if FileAccess.file_exists("user://session.dat"):
 		DirAccess.remove_absolute("user://session.dat")
-#endregion Filr session
+#endregion Local File session
+
+#region Remote File session
+
+func list_fear():
+	var url = api_endpoint + "rest/v1/rpc/list_storage_objects"
+	if not is_authenticated():
+		push_error("User not authenticated! Cannot get private information!")
+		
+	var headers = [
+		"apikey: " + published_key, 
+		"Authorization: Bearer " + str(access_token),
+		"Content-Type: application/json"
+		]
+	var body = JSON.stringify(
+		{
+			"bucket_id": "The Fear",
+			"prefix": "Ornate/",
+			"limits": 100,
+			"offsets":0
+		}
+	)
+		
+	http_request.set_meta("request_type", "list_fear_bucket")
+	http_request.request(url, headers, HTTPClient.METHOD_POST, body)
+	GlobalLogger.debug("Idk stop here I guess!")
+	
+	
+	
+#endregion Remote File session
