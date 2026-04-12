@@ -13,6 +13,8 @@ signal auth_state_changed(user)
 var http_request: HTTPRequest
 var current_user = null
 var access_token = ""
+var refresh_token = ""
+
 func _ready():
 	http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -64,6 +66,47 @@ func sign_out():
 #Return auth state:
 func is_authenticated() -> bool:
 	return current_user != null
+	
+func refresh_session():
+	var url = api_endpoint + "/auth/v1/token?grant_type=refresh_token"
+	var headers = [
+		"apikey: " + published_key,
+		"Content-Type: application/json"
+	]
+	
+	var body = JSON.stringify({
+		"refresh_token": refresh_token
+	})
+	
+	http_request.set_meta("request_type", "refresh")
+	http_request.request(url, headers, HTTPClient.METHOD_POST, body)
+	
+func is_token_expired() -> bool:
+	var data = decode_jwt_payload(access_token)
+	if not data.has("exp"):
+		GlobalLogger.error("Refreshing due to failed JSON parse")
+		return true  # assume expired if unreadable
+
+	var now = Time.get_unix_time_from_system()
+	if now > int(data.exp):
+		GlobalLogger.debug("Refreshing JWT due to expired token")
+	else:
+		GlobalLogger.debug("Token still valid!")
+	return now > int(data.exp)
+
+func decode_jwt_payload(token: String) -> Dictionary:
+	var parts = token.split(".")
+	if parts.size() < 2:
+		return {}
+	var payload = parts[1]
+	# Convert Base64URL → Base64
+	payload = payload.replace("-", "+").replace("_", "/")
+	# Add padding if missing
+	while payload.length() % 4 != 0:
+		payload += "="
+	var decoded = Marshalls.base64_to_utf8(payload)
+	var json = JSON.parse_string(decoded)
+	return json if typeof(json) == TYPE_DICTIONARY else {}
 
 #endregion Authentication
 
@@ -74,6 +117,8 @@ func get_all_players():
 		"apikey: " + published_key
 	]
 	if is_authenticated():
+		if is_token_expired():
+			await refresh_session()
 		headers.append("Authorization: Bearer " + str(access_token))
 	else:
 		headers.append("Authorization: Bearer " + str(published_key))
@@ -101,6 +146,8 @@ func create_player(player_name: String, theme: Themes):
 #region Internal Methods
 func _on_request_completed(_result, response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
+	var result = _result
+	var test_body = body
 	var request_type = http_request.get_meta("request_type","")
 	match request_type:
 		"signup":
@@ -133,6 +180,14 @@ func _on_request_completed(_result, response_code, _headers, body):
 				GlobalLogger.error("Error " + str(response_code) + ": " + str(json))
 		"list_fear_bucket":
 			GlobalLogger.info("File data: " + str(json))
+		"refresh":
+			if response_code == 200:
+				access_token = json.access_token
+				refresh_token = json.refresh_token
+				_save_session(json)
+				GlobalLogger.debug("Session refreshed")
+			else:
+				GlobalLogger.warn("Refresh failed, user must sign in again")
 		_:
 			GlobalLogger.error("Unhandled API Request!")
 			request_completed.emit(null)
@@ -143,7 +198,11 @@ func _on_request_completed(_result, response_code, _headers, body):
 func _save_session(auth_data):
 	var file = FileAccess.open("user://session.dat", FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(auth_data))
+		file.store_string(JSON.stringify({
+			"user":auth_data.user,
+			"access_token":auth_data.access_token,
+			"refresh_token":auth_data.refresh_token
+			}))
 		file.close()
 
 func _load_session():
@@ -156,6 +215,7 @@ func _load_session():
 			if auth_data:
 				current_user = auth_data.user
 				access_token = auth_data.access_token
+				refresh_token = auth_data.refresh_token
 				auth_state_changed.emit(current_user)
 				GlobalLogger.debug("Session restored: " + str(current_user.email) + " JWT Token : " + str(access_token.left(4) + "..." + str(access_token.right(4))))
 				
@@ -168,26 +228,29 @@ func _clear_session():
 #region Remote File session
 
 func list_fear():
-	var url = api_endpoint + "rest/v1/rpc/list_storage_objects"
 	if not is_authenticated():
 		push_error("User not authenticated! Cannot get private information!")
-		
+		return
+	if is_token_expired():
+		await refresh_session()
+
+	var bucket_name = "TheFear"  # URL-encoded bucket name
+	var url = api_endpoint + "/storage/v1/object/list/" + bucket_name
+	
 	var headers = [
-		"apikey: " + published_key, 
+		"apikey: " + published_key,
 		"Authorization: Bearer " + str(access_token),
 		"Content-Type: application/json"
-		]
-	var body = JSON.stringify(
-		{
-			"bucket_id": "The Fear",
-			"prefix": "Ornate/",
-			"limits": 100,
-			"offsets":0
-		}
-	)
-		
+	]
+	
+	var body = JSON.stringify({
+		"prefix": "Ornate/",
+		"limit": 100,
+		"offset": 0
+	})
+
 	http_request.set_meta("request_type", "list_fear_bucket")
-	http_request.request(url, headers, HTTPClient.METHOD_POST, body)
+	http_request.request(url, headers, HTTPClient.METHOD_POST, body)  # list endpoint requires POST
 	GlobalLogger.debug("Idk stop here I guess!")
 	
 	
