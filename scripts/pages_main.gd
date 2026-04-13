@@ -19,7 +19,7 @@ func _ready() -> void:
 	
 	
 func _on_delve_button_pressed() -> void:
-	Pages_SQL.list_fear()
+	Pages_SQL.list_fear("")
 	#GlobalLogger.debug("Re-enable Later!!!")
 	
 func _on_data_received(data, error):

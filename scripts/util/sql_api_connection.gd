@@ -8,6 +8,10 @@ const published_key: String = "sb_publishable_dqoaakWLIGLCbyKuepLZ4g_Bsc8G7ht"
 signal request_completed(data, error)
 #Signal for catching user login events
 signal auth_state_changed(user)
+#Signal for holding filedata
+signal fear_list_ready(files)
+#Signal for recusive directory listing
+signal fear_recursive_list_ready(files)
 
 
 var http_request: HTTPRequest
@@ -23,6 +27,8 @@ func _ready():
 	#Check for and load saved session
 	_load_session()
 	
+	fear_list_ready.connect(func(files):
+		download_fear_local_copy(files))
 	
 #region Authentication
 #Allows users to signup for an account
@@ -146,8 +152,6 @@ func create_player(player_name: String, theme: Themes):
 #region Internal Methods
 func _on_request_completed(_result, response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	var result = _result
-	var test_body = body
 	var request_type = http_request.get_meta("request_type","")
 	match request_type:
 		"signup":
@@ -179,7 +183,10 @@ func _on_request_completed(_result, response_code, _headers, body):
 				request_completed.emit(null, json)
 				GlobalLogger.error("Error " + str(response_code) + ": " + str(json))
 		"list_fear_bucket":
-			GlobalLogger.info("File data: " + str(json))
+			var prefix = http_request.get_meta("prefix")
+			var files = json
+			#TODO implement recussion next!!
+			fear_list_ready.emit(json)
 		"refresh":
 			if response_code == 200:
 				access_token = json.access_token
@@ -194,7 +201,7 @@ func _on_request_completed(_result, response_code, _headers, body):
 		
 #endregion Internal Methods
 
-#region Local File session
+#region Local Save session
 func _save_session(auth_data):
 	var file = FileAccess.open("user://session.dat", FileAccess.WRITE)
 	if file:
@@ -216,6 +223,8 @@ func _load_session():
 				current_user = auth_data.user
 				access_token = auth_data.access_token
 				refresh_token = auth_data.refresh_token
+				if is_token_expired():
+					refresh_session()
 				auth_state_changed.emit(current_user)
 				GlobalLogger.debug("Session restored: " + str(current_user.email) + " JWT Token : " + str(access_token.left(4) + "..." + str(access_token.right(4))))
 				
@@ -223,11 +232,11 @@ func _load_session():
 func _clear_session():
 	if FileAccess.file_exists("user://session.dat"):
 		DirAccess.remove_absolute("user://session.dat")
-#endregion Local File session
+#endregion Local Save session
 
 #region Remote File session
 
-func list_fear():
+func list_fear(prefix : String):
 	if not is_authenticated():
 		push_error("User not authenticated! Cannot get private information!")
 		return
@@ -244,15 +253,27 @@ func list_fear():
 	]
 	
 	var body = JSON.stringify({
-		"prefix": "Ornate/",
+		"prefix": prefix,
 		"limit": 100,
 		"offset": 0
 	})
 
 	http_request.set_meta("request_type", "list_fear_bucket")
+	http_request.set_meta("prefix",prefix)
 	http_request.request(url, headers, HTTPClient.METHOD_POST, body)  # list endpoint requires POST
-	GlobalLogger.debug("Idk stop here I guess!")
 	
+
 	
+func download_fear_local_copy(fear_files : Array):
+	
+	for fear in fear_files:
+		GlobalLogger.debug(str(fear))
+		var file = FileAccess.open("user://Fear/"+fear["name"], FileAccess.READ_WRITE)
+		if file:
+			if FileAccess.get_modified_time("user://Fear/"+fear["name"]) < fear["meatdata"]["lastModified"]:
+				GlobalLogger.debug("File outdated!")
+		else:
+			GlobalLogger.debug("File Missing: " + fear["name"])
+			
 	
 #endregion Remote File session
