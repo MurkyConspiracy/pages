@@ -89,6 +89,23 @@ unique_name_in_owner = true
 layout_mode = 2
 text = " signup "
 
+[node name="ValidationContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 34
+
+[node name="Validation_code" type="LineEdit" parent="CenterContainer/VBoxContainer/ValidationContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "Code"
+
+[node name="Submit_Validation" type="Button" parent="CenterContainer/VBoxContainer/ValidationContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "   Submit   "
+
 [node name="Status_Label" type="Label" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -101,3 +118,4 @@ vertical_alignment = 1
 [connection signal="text_submitted" from="CenterContainer/VBoxContainer/password_input" to="." method="_on_password_input_text_submitted"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/login_button" to="." method="_on_login_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/signup_button" to="." method="_on_signup_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ValidationContainer/Submit_Validation" to="." method="_on_submit_validation_pressed"]

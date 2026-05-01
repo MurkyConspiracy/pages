@@ -42,7 +42,7 @@ func sign_up(email: String, password: String):
 	var body = JSON.stringify({
 		"email": email,
 		"password": password
-	})
+	})	
 
 	http_request.set_meta("request_type", "signup")
 	http_request.request(url, headers, HTTPClient.METHOD_POST, body)

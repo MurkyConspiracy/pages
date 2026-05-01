@@ -5,6 +5,9 @@ extends Control
 @onready var signup_button: Button = %signup_button
 @onready var status_label: Label = %Status_Label
 @onready var login_button: Button = %login_button
+@onready var validation_container: HBoxContainer = %ValidationContainer
+@onready var submit_validation: Button = %Submit_Validation
+@onready var validation_code: LineEdit = %Validation_code
 
 
 func _ready() -> void:
@@ -47,8 +50,9 @@ func _on_signup_button_pressed() -> void:
 		return
 	
 	status_label.add_theme_color_override("font_color",Color.YELLOW)
-	status_label.text = "Creating account. Please verify your email!"
-	Pages_SQL.sign_up(email, password)
+	status_label.text = "Please verify your email!"
+	validation_container.show()
+	AwsCognitoConnection.register_account(email, password)
 	
 func _on_auth_changed(user):
 	if user:
@@ -67,3 +71,9 @@ func _go_to_main_menu():
 
 func _on_password_input_text_submitted(new_text: String) -> void:
 	_on_login_button_pressed()
+
+
+func _on_submit_validation_pressed() -> void:
+	var email = email_input.text
+	var token = validation_code.text
+	AwsCognitoConnection.validate_account(email, token)
